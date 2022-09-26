@@ -1,2 +1,19 @@
 # OSS-PackRat
-OSS PackRat helps you build databases of open-source software repositories for further analysis
+
+Thanks for visiting OSS PackRat!
+
+# Overview
+
+## Project Goals
+
+## How OSS PackRat Facilitates Reproducible Research
+
+# User Manual
+
+## Installing OSS PackRat
+
+## Using OSS PackRat
+
+
+# Contributing
+
