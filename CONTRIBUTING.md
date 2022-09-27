@@ -5,8 +5,7 @@ If you would like to contribute to development, please pull the latest version o
 ## An Example Workflow
 Let's say you've found a bug you think you can fix or thought of a feature you want to add to the project. Please start or join a conversation using GitHub's issues feature to discuss it. Once you've gotten the go-ahead to implement your changes, you'll want to do the following:
 
-// TODO: Make a setup doc
-First setup the project, follow the steps outlined in [the local setupguide](LINK_TO_SETUP_DOC).
+First setup the project, follow the steps outlined in [the local setupguide](SETUP.md).
 
 Then, think of a meaningful but short name for what you're about to build and use that name to create a new branch. Here's an example:
 
@@ -30,7 +29,7 @@ If you need help with Git, this repository's author created a three-article seri
 
 ## Test Your Changes
 
-// TODO: Add guidance for testing
+This project uses pytest for its unit testing needs. To run all tests, run the command `pytest` from the project root.
 
 ## Issue Label Guide
 
