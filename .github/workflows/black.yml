@@ -1,4 +1,4 @@
-name: lint the codebase
+name: Lint Codebase with Black
 
 on: [pull_request]
 
