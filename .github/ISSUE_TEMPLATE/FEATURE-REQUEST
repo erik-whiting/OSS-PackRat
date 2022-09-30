@@ -1,0 +1,28 @@
+name: Feature Request
+description: Tell us about a feature you want
+title: "[Feature]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Tell us about something new you'd like to see in OSS-PackRat
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: Feature Description
+      description: Please provide an overview for the new feature you'd like to see in OSS-PackRat
+    validations:
+      required: true
+  - type: textarea
+    id: technical-details
+    attributes:
+      label: Technical Details
+      description: If you have thoughts about how to implement this feature, please share them here. Don't worry if you don't have any ideas about this though, you can leave this blank!
+    validations:
+      required: false
+  - type: input
+    id: who
+    attributes:
+      label: Assigned Developer
+      description: If there's someone specific who you think should take this work on, please enter their GitHub username. You can enter your own GitHub username if you'd like to be responsible for building the feature. You can leave this blank as well!
+      placeholder: ex. erik-whiting
