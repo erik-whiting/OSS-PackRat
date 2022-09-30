@@ -1,0 +1,44 @@
+name: Build and Test
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: ubuntu
+    strategy:
+      matrix:
+        python-version: [3.7, 3.8, 3.9, '3.10']
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: osspackrat_test
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Python requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+    - name: Install Database Requirements
+      run: |
+        apt-get update
+        apt-get install --yes postgresql-client
+    - name: Build database
+      run: |
+        psql --username=postgres --no-password --command="CREATE DATABASE osspackrat_test;"
+        psql --username=postgres --no-password --dbname=osspackrat_test --file=create_tables.sql
+        psql --username=postgres --no-password --dbname=osspackrat_test --file=test_seed_data.sql
+    - name: Run Tests
+      run: pytest
