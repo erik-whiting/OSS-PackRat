@@ -1,0 +1,35 @@
+name: Bug Report
+description: Tell us about a bug you found
+title: "[Bug]: "
+assignees:
+  - erik-whiting
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to let us know about a bug you found. Please fill out the fields below as best you can to help facilitate a solution
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the situation
+      placeholder: What happened
+      value: "Something blew up"
+    validations:
+      required: true
+  - type: textarea
+    id: what-shoulda-happened
+    attributes:
+      label: What should have happened?
+      description: What did you expect to happen?
+      placeholder: What should have happened
+      value: "This thing was not supposed to blow up"
+    validations:
+      required: true
+  - type: textarea
+    id: comments
+    attributes:
+      label: Comments
+      description: Anything else you want to say?
+    validations:
+      required: false

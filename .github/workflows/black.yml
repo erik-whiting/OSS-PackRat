@@ -1,4 +1,4 @@
-name: lint the codebase
+name: Lint the Codebase
 
 on: [pull_request]
 
