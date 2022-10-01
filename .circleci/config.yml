@@ -1,0 +1,38 @@
+version: 2.1
+
+orbs:
+  python: circleci/python@1.5.0
+
+jobs:
+  build-and-test:
+    docker:
+      - image: cimg/python:3.10.2
+      - image: cimg/postgres:14.0
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: osspackrat_test
+    steps:
+      - checkout
+      - python/install-packages:
+          pkg-manager: pip
+          pip-dependency-file: requirements.txt
+      - run:
+          name: Setup Database
+          command: |
+            sudo apt update
+            sudo apt install -y postgresql-client || true
+      - run:
+          name: Build Database
+          command: |
+            psql --username=postgres --no-password --command="CREATE DATABASE osspackrat_test;"
+            psql --username=postgres --no-password --dbname=osspackrat_test --file=create_tables.sql
+            psql --username=postgres --no-password --dbname=osspackrat_test --file=test_seed_data.sql
+      - run:
+          name: Run tests
+          # This assumes pytest is installed via the install-package step above
+          command: pytest
+
+workflows:
+  main_workflow:
+    jobs:
+      - build-and-test
