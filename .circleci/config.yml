@@ -21,6 +21,7 @@ jobs:
           command: |
             sudo apt update
             sudo apt install -y postgresql-client || true
+            pg_ctl start
       - run:
           name: Build Database
           command: |
