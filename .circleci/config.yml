@@ -7,7 +7,7 @@ jobs:
   build-and-test:
     docker:
       - image: cimg/python:3.10.2
-      - image: cimg/postgres:14.0
+      - image: cimg/postgres:10.0
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: osspackrat_test
@@ -21,7 +21,7 @@ jobs:
           command: |
             sudo apt update
             sudo apt install -y postgresql-client || true
-            pg_ctl start
+            sudo systemctl start postgresql.service
       - run:
           name: Build Database
           command: |
