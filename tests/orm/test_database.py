@@ -4,7 +4,7 @@ from oss_packrat.orm import database
 
 
 class TestDatabase:
-    test_db_name = "osspackrat_test"
+    test_db_name = os.getenv("DB_NAME", "osspackrat_test")
     test_error_log = "test_db_error_log.csv"
     connection = database.Connection(test_db_name, test_error_log)
     q = database.Query(connection)
