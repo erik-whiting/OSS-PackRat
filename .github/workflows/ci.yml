@@ -41,5 +41,6 @@ jobs:
         env:
           DB_HOST: postgres
           DB_USER: osspackrat
+          DB_PORT: 5432
           DB_PASSWORD: osspackrat_test
           DB_NAME: osspackrat_test
