@@ -13,7 +13,7 @@ jobs:
         python-version: ["3.10"]
 
     services:
-      postgres:
+      db:
         image: postgres
         env:
           POSTGRES_PASSWORD: osspackrat_test
@@ -39,7 +39,7 @@ jobs:
       - name: Run tests
         run: pytest
         env:
-          DB_HOST: postgres
+          DB_HOST: db
           DB_USER: osspackrat
           DB_PORT: 5432
           DB_PASSWORD: osspackrat_test
