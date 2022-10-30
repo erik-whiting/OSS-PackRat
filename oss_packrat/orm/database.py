@@ -43,10 +43,10 @@ class Connection:
         Parameters
         ----------
         db_name : str, OSSPackRat
-          The name of the database you're using. The default
-          value is OSSPackRat, so if you've named the database
-          something else, just pass that name as a string to
-          the constructor.
+            The name of the database you're using. The default
+            value is OSSPackRat, so if you've named the database
+            something else, just pass that name as a string to
+            the constructor.
 
         error_log : str, db_error_log.csv
 
@@ -118,7 +118,7 @@ class Query:
         Parameters
         ----------
         sql : str
-          The SQL command to execute
+            The SQL command to execute
 
         Examples
         --------
@@ -142,7 +142,7 @@ class Query:
         Parameters
         ----------
         sql : str
-          The SQL command to execute
+            The SQL command to execute
 
         Examples
         --------
@@ -163,6 +163,18 @@ class Query:
         and expect the results to be returned in a `list`. This
         method implements the `execute` method, and then uses
         the class `cursor` attribute to grab results.
+
+        Parameters
+        ----------
+        sql : str
+            The SQL query to run
+
+        Examples
+        --------
+        # Assume the variable `q` is an instance of `Query`
+        sql = "SELECT * FROM table;"
+        results = q.command(sql)
+        # `results` will be a list of lists.
         """
         self.execute(sql)
         results = []
