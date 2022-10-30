@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict
 
 from oss_packrat.orm import database
 
@@ -24,7 +24,16 @@ class DatabaseModel:
         self.table_name = table_name
         self.query_object = database.Query(database.Connection(database_name))
 
-    def _insert(self, attributes: dict[str, Any]) -> None:
+    def get_identifier(self):
+        """
+        The `get_identifier` method needs to be implemented
+        on each inheriting class of `DatabaseModel`. This
+        is the property--most likely an ID--that the database
+        uses to uniquely identify a record.
+        """
+        raise NotImplementedError
+
+    def _insert(self, attributes: Dict[str, Any]) -> None:
         """
         The protected insert method is how a DatabaseModel
         class will initially insert itself into the database.
@@ -48,7 +57,7 @@ class DatabaseModel:
         sql = f"INSERT INTO {self.table_name} {col_string} VALUES {val_string}"
         self.query_object.command(sql)
 
-    def _update(self, attributes: dict[str, str]) -> None:
+    def _update(self, attributes: Dict[str, str]) -> None:
         """
         The protected _update method is how a DatabaseModel
         class can update itself in the database. It assumes
@@ -64,5 +73,5 @@ class DatabaseModel:
                 val = f"'{val}'"
             updates.append(f"{attribute} = {val}")
         sql += ", ".join(updates)
-        sql += f" WHERE id = {self.id}"
+        sql += f" WHERE id = {self.get_identifier()}"
         self.query_object.command(sql)

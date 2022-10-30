@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict
 
 from .db_model import DatabaseModel
 
@@ -28,7 +28,8 @@ class Repository(DatabaseModel):
     scrape other VCS since there's no guarantee a GitHub repo ID
     isn't being used by GitLab for another repository.
     """
-    def __init__(self, data: dict[str, Any], database_name: str = "OSSPackRat"):
+
+    def __init__(self, data: Dict[str, Any], database_name: str = "OSSPackRat"):
         """
         This model is instantiated via a dictionary which comes either
         from the GitHub API or from a database record. You can also
@@ -68,7 +69,7 @@ class Repository(DatabaseModel):
         records when the `Repository` model inserts
         itself. This is not yet implemented
         """
-        sql = f"SELECT id FROM programming_languages WHERE name = {self.programming_language}"
+        sql = f"SELECT id FROM programming_languages WHERE name = {self.language}"
         return self.query_object.query(sql)[0]
 
     def insert(self) -> None:
@@ -103,7 +104,10 @@ class Repository(DatabaseModel):
             }
         )
 
-    def update(self, attributes: dict[str, Any]) -> None:
+    def get_identifier(self):
+        return self.id
+
+    def update(self, attributes: Dict[str, Any]) -> None:
         """
         The `update` method simply takes in a dictionary
         value of attributes and values to be updated. It
