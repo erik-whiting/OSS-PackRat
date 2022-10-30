@@ -1,2 +1,3 @@
 PyGitHub
 psycopg2
+pytest
