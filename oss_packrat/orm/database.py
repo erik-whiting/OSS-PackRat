@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Any
 import datetime
 import psycopg2
 import psycopg2.extras
@@ -156,7 +156,7 @@ class Query:
         except Exception as e:
             self.log_error(sql, e)
 
-    def query(self, sql: str) -> List[str]:
+    def query(self, sql: str) -> List[Dict[str, Any]]:
         """
         The `query` method is the primary means of getting
         data out of the database. Simply pass it a SQL string
@@ -174,7 +174,7 @@ class Query:
         # Assume the variable `q` is an instance of `Query`
         sql = "SELECT * FROM table;"
         results = q.command(sql)
-        # `results` will be a list of lists.
+        # `results` will be a list of dictionaries.
         """
         self.execute(sql)
         results = []

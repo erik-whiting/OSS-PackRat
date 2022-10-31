@@ -22,6 +22,7 @@ class DatabaseModel:
             value is OSSPackRat.
         """
         self.table_name = table_name
+        self.database_name = database_name
         self.query_object = database.Query(database.Connection(database_name))
 
     def get_identifier(self):

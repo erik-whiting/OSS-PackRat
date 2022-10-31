@@ -24,7 +24,7 @@ class TestRepository:
             "forks": 3,
             "watchers": 12,
             "issues": 5,
-            "programming_language": "Python",
+            "programming_language": "C",
             "created": datetime.date.today(),
         }
         repo = repository.Repository(data, self.test_db_name)
@@ -41,11 +41,22 @@ class TestRepository:
         assert new_repo["forks"] == 3
         assert new_repo["watchers"] == 12
         assert new_repo["issues"] == 5
+        # Ensure we didn't create an extra programming_languages record for C
+        pl_sql = "SELECT * FROM programming_languages WHERE name = 'C'"
+        pl_results = self.q.query(pl_sql)
+        assert len(pl_results) == 1
+        # Ensure repositories_programming_language record was inserted
+        pl_repo_sql = """
+          SELECT * FROM repositories_programming_languages
+          WHERE repository_id = 101 AND programming_language_id = 1
+        """
+        pl_repo_results = self.q.query(pl_repo_sql)
+        assert len(pl_repo_results) == 1
 
-    def test_update(self):
+    def test_insert_pl(self):
         data = {
-            "id": 102,
-            "name": "another_repo",
+            "id": 103,
+            "name": "fake_repo_pl",
             "description": "Fake repository for testing purposes",
             "html_url": "https://fake.website",
             "clone_url": "https://fake.website",
@@ -61,6 +72,37 @@ class TestRepository:
         }
         repo = repository.Repository(data, self.test_db_name)
         repo.insert()
+        pl_sql = "SELECT * FROM programming_languages WHERE name = 'Python'"
+        pl_results = self.q.query(pl_sql)[0]
+        assert pl_results["name"] == "Python"
+        # Ensure repositories_programming_language record was inserted
+        pl_repo_sql = """
+          SELECT *
+          FROM repositories_programming_languages
+          WHERE repository_id = 103
+        """
+        pl_repo_results = self.q.query(pl_repo_sql)
+        assert len(pl_repo_results) == 1
+
+    def test_update(self):
+        data = {
+            "id": 102,
+            "name": "another_repo",
+            "description": "Fake repository for testing purposes",
+            "html_url": "https://fake.website",
+            "clone_url": "https://fake.website",
+            "ssh_url": "https://fake.website",
+            "git_url": "https://fake.website",
+            "topics": "testing, automation, selenium",
+            "stars": 100,
+            "forks": 3,
+            "watchers": 12,
+            "issues": 5,
+            "programming_language": "C",
+            "created": datetime.date.today(),
+        }
+        repo = repository.Repository(data, self.test_db_name)
+        repo.insert()
         repo.update({"forks": 4, "html_url": "https://anewfake.website"})
         new_repo = self.q.query("SELECT * FROM repositories WHERE id = 102")[0]
         assert new_repo["forks"] == 4
@@ -69,4 +111,6 @@ class TestRepository:
     @pytest.fixture(scope="session", autouse=True)
     def cleanup(self):
         yield
-        self.q.command("DELETE FROM repositories WHERE id IN (101, 102);")
+        self.q.command("DELETE FROM repositories_programming_languages;")
+        self.q.command("DELETE FROM repositories WHERE id IN (101, 102, 103);")
+        self.q.command("DELETE FROM programming_languages WHERE name != 'C'")

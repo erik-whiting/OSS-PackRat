@@ -1,5 +1,7 @@
 from typing import Any, Dict
 
+from oss_packrat.models.programming_language import ProgrammingLanguage
+
 from .db_model import DatabaseModel
 
 
@@ -61,16 +63,14 @@ class Repository(DatabaseModel):
         self.created = data["created"]
         super().__init__("repositories", database_name)
 
-    def __get_programming_language_id(self) -> str:
+    def __set_programming_language(self) -> None:
         """
-        This private method will be used to build
-        `programming_languages` records in the database
-        as well as `repositories_programming_languages`
-        records when the `Repository` model inserts
-        itself. This is not yet implemented
+        This private method gets a relevant programming language
+        record from programming_langauges which is then used
+        to create a repositories_programming_languages record.
         """
-        sql = f"SELECT id FROM programming_languages WHERE name = {self.language}"
-        return self.query_object.query(sql)[0]
+        programming_language = ProgrammingLanguage(self.language, self.database_name)
+        self.programming_language = programming_language
 
     def insert(self) -> None:
         """
@@ -80,12 +80,11 @@ class Repository(DatabaseModel):
         method builds the dictionary only from attributes
         that have a database representation. It uses that
         dictionary to call the `DatabaseModel` base class's
-        `_insert` method. This method will also impelement
-        functionality that will add a record to the
-        `programming_languages` table if one doesn't exist
-        yet. It will also handle inserting a record in the
-        `repositories_programming_languages` in the database
-        upon insertion. This has not yet been implemented.
+        `_insert` method.
+
+        After insertion, this method will also call the private
+        __set_programming_language method. Finally, it will
+        create a repositories_programming_languages record.
         """
         self._insert(
             {
@@ -103,6 +102,19 @@ class Repository(DatabaseModel):
                 "created": self.created,
             }
         )
+
+        self.__set_programming_language()
+        repo_pl_sql = f"""
+            INSERT INTO repositories_programming_languages (
+                repository_id,
+                programming_language_id
+            )
+            VALUES (
+                {self.id},
+                {self.programming_language.id}
+            );
+        """
+        self.query_object.command(repo_pl_sql)
 
     def get_identifier(self):
         return self.id
