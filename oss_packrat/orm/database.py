@@ -1,5 +1,5 @@
+from typing import List, Dict, Any
 import datetime
-from distutils.log import error
 import psycopg2
 import psycopg2.extras
 import os
@@ -156,7 +156,7 @@ class Query:
         except Exception as e:
             self.log_error(sql, e)
 
-    def query(self, sql: str) -> list[str]:
+    def query(self, sql: str) -> List[Dict[str, Any]]:
         """
         The `query` method is the primary means of getting
         data out of the database. Simply pass it a SQL string
@@ -174,7 +174,7 @@ class Query:
         # Assume the variable `q` is an instance of `Query`
         sql = "SELECT * FROM table;"
         results = q.command(sql)
-        # `results` will be a list of lists.
+        # `results` will be a list of dictionaries.
         """
         self.execute(sql)
         results = []
@@ -182,7 +182,7 @@ class Query:
             results.append(row)
         return results
 
-    def log_error(self, sql, exception=""):
+    def log_error(self, sql, exception: Exception):
         """
         The `log_error` method supports reproducibility by
         keeping track of any database actions that fail. This

@@ -1,2 +1,4 @@
 PyGitHub
 psycopg2
+pytest
+mypy
