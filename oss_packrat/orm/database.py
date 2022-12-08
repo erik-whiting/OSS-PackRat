@@ -4,10 +4,10 @@ import psycopg2
 import psycopg2.extras
 import os
 
-user = os.getenv("PSQL_USER")
-password = os.getenv("PSQL_PASSWORD")
+user = os.getenv("DB_USER")
+password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
-port = "5432"
+port = os.getenv('DB_PORT', "5432")
 
 
 class Connection:
@@ -34,8 +34,8 @@ class Connection:
         Please note, this class assumes that you have the following
         environment variables set:
 
-        PSQL_USER     : The user of your postgres instance
-        PSQL_PASSWORD : The postgres user's password
+        DB_USER       : The user of your postgres instance
+        DB_PASSWORD   : The postgres user's password
         DB_HOST       : The host name of your database
 
         If these are not set, no connection will be established.
